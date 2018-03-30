@@ -31,7 +31,7 @@ public class GenerateReportView extends JFrame {
         add(btnConfirm);
         add(btnOpenReport);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
+        setVisible(false);
     }
 
     private void initializeFields() {
@@ -63,5 +63,13 @@ public class GenerateReportView extends JFrame {
 
     public void setViewReportButtonActionListener(ActionListener btnViewReportListener) {
         btnOpenReport.addActionListener(btnViewReportListener);
+    }
+
+    public void setVisibility(Boolean bool) {
+        if (bool) {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
     }
 }

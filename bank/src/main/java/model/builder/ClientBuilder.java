@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ClientBuilder {
 
-    Client client;
+    private Client client;
 
     public ClientBuilder() {
         this.client = new Client();

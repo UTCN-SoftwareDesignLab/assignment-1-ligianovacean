@@ -14,6 +14,7 @@ public class LoginView extends JFrame{
     private JTextField tfPassword;
     private JButton btnLogin;
     private JButton btnRegister;
+
     public LoginView() throws HeadlessException {
         setSize(300, 300);
         setLocationRelativeTo(null);
@@ -52,6 +53,14 @@ public class LoginView extends JFrame{
 
     public void setRegisterButtonListener(ActionListener registerButtonListener) {
         btnRegister.addActionListener(registerButtonListener);
+    }
+
+    public void setVisibility(Boolean bool) {
+        if (bool) {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
     }
 
 }

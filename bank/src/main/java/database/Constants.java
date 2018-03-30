@@ -22,8 +22,9 @@ public class Constants {
         public static final String USER_ROLE = "user_role";
         public static final String CLIENT = "client";
         public static final String ACCOUNT = "account";
+        public static final String BILL = "bill";
 
-        public static final String[] ORDERED_TABLES_FOR_CREATION = new String[]{USER, ROLE, RIGHT, ROLE_RIGHT, USER_ROLE, CLIENT, ACCOUNT};
+        public static final String[] ORDERED_TABLES_FOR_CREATION = new String[]{USER, ROLE, RIGHT, ROLE_RIGHT, USER_ROLE, CLIENT, ACCOUNT, BILL};
     }
 
 
@@ -68,6 +69,8 @@ public class Constants {
 
     public static class Columns {
         public static final String[] CLIENT_TABLE_COLUMNS = new String[] {"id", "name", "Id Card No.", "PNC", "Address"};
+        public static final String[] ACCOUNT_TABLE_COLUMNS = new String[] {"id", "type", "sum", "creation_date", "id_client"};
+        public static final String[] BILL_TABLE_COLUMNS = new String[] {"id", "identif", "sum", "id_client"};
     }
 
 }

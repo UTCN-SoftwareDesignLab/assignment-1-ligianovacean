@@ -91,6 +91,21 @@ public class SQLTableCreationFactory {
                         "    REFERENCES client (id)" +
                         "    ON DELETE CASCADE" +
                         "    ON UPDATE CASCADE);";
+            case BILL:
+                return "CREATE TABLE IF NOT EXISTS bill(" +
+                       " id int NOT NULL AUTO_INCREMENT," +
+                       " identif VARCHAR(20) NOT NULL," +
+                       " sum DOUBLE NOT NULL," +
+                       " id_client int NOT NULL," +
+                       " PRIMARY KEY (id)," +
+                       " UNIQUE INDEX id_UNIQUE (id ASC)," +
+                       " UNIQUE INDEX identif_UNIQUE (identif ASC)," +
+                       " INDEX id_client_idx (id_client ASC)," +
+                       " CONSTRAINT id_fkclient" +
+                       "    FOREIGN KEY (id_client)" +
+                       "    REFERENCES client (id)" +
+                       "    ON DELETE CASCADE" +
+                       "    ON UPDATE CASCADE);";
             default:
                 return "";
         }

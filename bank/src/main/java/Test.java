@@ -1,12 +1,19 @@
+import view.CreateAccountView;
+import view.ProcessUtilityBillsView;
+import view.TransferView;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class Test {
 
-//    private static String[] columnNames = {"A", "B", "C"};
-//    private static Object[][] data = {
-//            {"Moni", "adsad", 2},
-//            {"Jhon", "ewrewr", 4},
-//            {"Max", "zxczxc", 6}
-//    };
-//    private static CreateAccountView test;
+    private static String[] columnNames = {"A", "B", "C"};
+    private static Object[][] data = {
+            {"Moni", "adsad", 2},
+            {"Jhon", "ewrewr", 4},
+            {"Max", "zxczxc", 6}
+    };
+    private static CreateAccountView test;
 
     public static void main(String[] args) {
         //new LoginController(new LoginView(), componentFactory.getAuthenticationService());
@@ -22,7 +29,7 @@ public class Test {
         //new RUDView(columnNames, data);
 
         //new TransferView();
-        //new ProcessUtilityBillsView();
+        new ProcessUtilityBillsView();
         //CreateAccountView test = new CreateAccountView(columnNames, data);
 
 //        test = new CreateAccountView(columnNames, data);
@@ -46,13 +53,13 @@ public class Test {
     }
 
 
-//    private static class TestTable implements ActionListener {
-//
-//        @Override
-//        public void actionPerformed(ActionEvent e) {
-//            System.out.println(test.getClientId());
-//        }
-//    }
+    private static class TestTable implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            System.out.println(test.getClientId());
+        }
+    }
 
 
 }

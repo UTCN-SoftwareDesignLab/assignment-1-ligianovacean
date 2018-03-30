@@ -25,7 +25,7 @@ public class CreateEmployeeView extends JFrame {
         add(tfPassword);
         add(btnCreate);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
+        setVisible(false);
     }
 
     private void initializeFields() {
@@ -46,6 +46,14 @@ public class CreateEmployeeView extends JFrame {
 
     private void setCreateButtonActionListener(ActionListener buttonActionListener) {
         btnCreate.addActionListener(buttonActionListener);
+    }
+
+    public void setVisibility(Boolean bool) {
+        if (bool) {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
     }
 
 }

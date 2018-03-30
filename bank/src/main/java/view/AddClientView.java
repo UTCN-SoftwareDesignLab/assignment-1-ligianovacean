@@ -33,7 +33,7 @@ public class AddClientView extends JFrame{
         add(tfAddress);
         add(btnSaveChanges);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
+        setVisible(false);
     }
 
     private void initializeFields() {
@@ -66,5 +66,13 @@ public class AddClientView extends JFrame{
 
     public String getAddress() {
         return tfAddress.getText();
+    }
+
+    public void setVisibility(Boolean bool) {
+        if (bool) {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
     }
 }

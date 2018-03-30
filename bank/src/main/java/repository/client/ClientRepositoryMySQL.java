@@ -81,6 +81,7 @@ public class ClientRepositoryMySQL implements ClientRepository {
             updateUserStatement.setString(1, client.getName());
             updateUserStatement.setString(2, client.getId_card_no());
             updateUserStatement.setString(3, client.getAddress());
+            updateUserStatement.setLong(4, client.getId());
             updateUserStatement.executeUpdate();
             return true;
         } catch (SQLException e) {

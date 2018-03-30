@@ -10,7 +10,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AddClientController {
+public class AddClientController implements Controller{
 
     private final AddClientView addClientView;
     private final ClientService clientService;
@@ -19,6 +19,16 @@ public class AddClientController {
         this.addClientView = addClientView;
         this.clientService = clientService;
         this.addClientView.setSaveChangesButtonListener(new SaveChangesListener());
+    }
+
+    @Override
+    public Notification<Controller> getNextController(String selection) {
+        return null;
+    }
+
+    @Override
+    public void setVisibility(Boolean bool) {
+        addClientView.setVisibility(bool);
     }
 
     private class SaveChangesListener implements ActionListener {

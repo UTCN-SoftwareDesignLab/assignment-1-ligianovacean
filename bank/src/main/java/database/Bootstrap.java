@@ -45,7 +45,8 @@ public class Bootstrap {
                     "TRUNCATE `role`;",
                     "DROP TABLE `role`, `user`;",
                     "TRUNCATE `account`;",
-                    "DROP TABLE `account`, `client`;"
+                    "TRUNCATE `bill`;",
+                    "DROP TABLE `account`, `bill`, `client`;"
             };
 
             Arrays.stream(dropStatements).forEach(dropStatement -> {

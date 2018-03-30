@@ -31,7 +31,7 @@ public class RUDView extends JFrame{
         add(btnUpdate);
         add(btnDelete);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
+        setVisible(false);
     }
 
     private void initializeFields() {
@@ -62,15 +62,28 @@ public class RUDView extends JFrame{
         return tfUniqueIdentifier.getText();
     }
 
-    public List<String> getSelectedRow() {
-        List<String> selection = new ArrayList<>();
-
+    public List<Object> getSelectedRow() {
+        List<Object> selection = new ArrayList<>();
+        int row = tbl.getSelectedRow();
+        int columnCount = tbl.getColumnCount();
+        for (int i = 0; i < columnCount; i++) {
+            selection.add(tbl.getValueAt(row, i));
+        }
         return selection;
     }
 
     public void loadTable(JTable tbl) {
+        this.tbl = tbl;
         scrollPane.setViewportView(tbl);
         revalidate();
         repaint();
+    }
+
+    public void setVisibility(Boolean bool) {
+        if (bool) {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
     }
 }

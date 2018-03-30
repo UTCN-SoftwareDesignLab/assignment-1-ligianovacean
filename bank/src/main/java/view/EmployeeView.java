@@ -11,11 +11,8 @@ public class EmployeeView extends JFrame {
 
     private JRadioButton rbAddClient;
     private JRadioButton rbUpdateClient;
-    private JRadioButton rbViewClient;
     private JRadioButton rbCreateAccount;
     private JRadioButton rbUpdateAccount;
-    private JRadioButton rbViewAccount;
-    private JRadioButton rbDeleteAccount;
     private JRadioButton rbTransferMoney;
     private JRadioButton rbProcessUtilityBills;
     private ButtonGroup btnGroup;
@@ -28,36 +25,27 @@ public class EmployeeView extends JFrame {
         setLayout(new BoxLayout(getContentPane(), Y_AXIS));
         add(rbAddClient);
         add(rbUpdateClient);
-        add(rbViewClient);
         add(rbCreateAccount);
         add(rbUpdateAccount);
-        add(rbViewAccount);
-        add(rbDeleteAccount);
         add(rbTransferMoney);
         add(rbProcessUtilityBills);
         add(btnConfirmSelection);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
+        setVisible(false);
     }
 
     private void initializeFields() {
         rbAddClient = new JRadioButton("Add Client");
-        rbUpdateClient = new JRadioButton("Update Client");
-        rbViewClient = new JRadioButton("View Client");
+        rbUpdateClient = new JRadioButton("Update/View Client");
         rbCreateAccount = new JRadioButton("Create Account");
-        rbUpdateAccount = new JRadioButton("Update Account");
-        rbViewAccount = new JRadioButton("View Account");
-        rbDeleteAccount = new JRadioButton("Delete account");
+        rbUpdateAccount = new JRadioButton("Update/Delete/View Account");
         rbTransferMoney = new JRadioButton("Transfer money");
         rbProcessUtilityBills = new JRadioButton("Process utility bills");
         btnGroup = new ButtonGroup();
         btnGroup.add(rbAddClient);
         btnGroup.add(rbUpdateClient);
-        btnGroup.add(rbViewClient);
         btnGroup.add(rbCreateAccount);
         btnGroup.add(rbUpdateAccount);
-        btnGroup.add(rbViewAccount);
-        btnGroup.add(rbDeleteAccount);
         btnGroup.add(rbTransferMoney);
         btnGroup.add(rbProcessUtilityBills);
         btnConfirmSelection = new JButton("Confirm Selection");
@@ -65,19 +53,13 @@ public class EmployeeView extends JFrame {
 
     public String getSelection() {
         if (rbAddClient.isSelected())
-            return "Add Client";
+            return "AddClient";
         if (rbUpdateClient.isSelected())
-            return "Update Client";
-        if (rbViewClient.isSelected())
-            return "ViewClient";
+            return "RUDClient";
         if (rbCreateAccount.isSelected())
             return "CreateAccount";
-        if (rbViewAccount.isSelected())
-            return "ViewAccount";
         if (rbUpdateAccount.isSelected())
-            return "UpdateAccount";
-        if (rbDeleteAccount.isSelected())
-            return "DeleteAccount";
+            return "RUDAccount";
         if (rbTransferMoney.isSelected())
             return "TransferMoney";
         if (rbProcessUtilityBills.isSelected())
@@ -87,6 +69,14 @@ public class EmployeeView extends JFrame {
 
     public void setConfirmSelectionButtonListener(ActionListener confirmSelectionButtonListener) {
         btnConfirmSelection.addActionListener(confirmSelectionButtonListener);
+    }
+
+    public void setVisibility(Boolean bool) {
+        if (bool) {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
     }
 
 }

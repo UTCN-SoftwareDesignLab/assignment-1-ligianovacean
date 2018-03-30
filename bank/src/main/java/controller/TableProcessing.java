@@ -1,11 +1,13 @@
 package controller;
 
+import model.validation.Notification;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class TableProcessing {
+public class TableProcessing{
 
     private static TableProcessing instance;
 
@@ -22,14 +24,14 @@ public class TableProcessing {
         Object[][] data = new Object[items.size()][columns.length];
         int rowNumber = 0;
         for (T row : items) {
-            Object[] rowData = new Object[columns.length];
+            String[] rowData = new String[columns.length];
             Field[] fields = row.getClass().getDeclaredFields();
             for(int counter = 0; counter < columns.length; counter++) {
                 fields[counter].setAccessible(true);
                 Object value;
                 try {
                     value = fields[counter].get(row);
-                    rowData[counter] = value;
+                    rowData[counter] = String.valueOf(value);
                 } catch (IllegalArgumentException | IllegalAccessException e) {
                     e.printStackTrace();
                 }

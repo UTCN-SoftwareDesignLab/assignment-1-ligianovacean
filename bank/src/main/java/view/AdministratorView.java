@@ -26,7 +26,7 @@ public class AdministratorView extends JFrame{
         add(rbGenerateReport);
         add(btnConfirmSelection);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setVisible(true);
+        setVisible(false);
     }
 
     private void initializeFields() {
@@ -56,6 +56,14 @@ public class AdministratorView extends JFrame{
         if (rbGenerateReport.isSelected())
             return "Generate Report";
         return "";
+    }
+
+    public void setVisibility(Boolean bool) {
+        if (bool) {
+            setVisible(true);
+        } else {
+            setVisible(false);
+        }
     }
 
 }

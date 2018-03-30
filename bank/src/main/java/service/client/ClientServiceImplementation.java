@@ -1,5 +1,6 @@
 package service.client;
 
+import model.Account;
 import model.Client;
 import model.validation.ClientValidator;
 import model.validation.Notification;
@@ -38,7 +39,7 @@ public class ClientServiceImplementation implements ClientService {
         return clientRepository.findById(id);
     }
 
-    public Notification<Boolean> update(Client client) {
+    public Notification<Boolean> updateClient(Client client) {
         ClientValidator clientValidator = new ClientValidator(client);
         boolean clientValid = clientValidator.validate();
         Notification<Boolean> updateClientNotification = new Notification<>();
@@ -52,5 +53,8 @@ public class ClientServiceImplementation implements ClientService {
         return updateClientNotification;
     }
 
+    public List<Client> findAllClients() {
+        return clientRepository.findAll();
+    }
 
 }
