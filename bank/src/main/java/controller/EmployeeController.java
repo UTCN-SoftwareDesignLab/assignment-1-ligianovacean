@@ -25,7 +25,7 @@ public class EmployeeController implements Controller{
     public EmployeeController(EmployeeView employeeView, HashMap<String, Controller> controllers) {
         this.employeeView = employeeView;
         this.controllers = controllers;
-        employeeView.setConfirmSelectionButtonListener(new ConfirmSelectionButtonListener());
+        this.employeeView.setConfirmSelectionButtonListener(new ConfirmSelectionButtonListener());
     }
 
     private class ConfirmSelectionButtonListener implements ActionListener {

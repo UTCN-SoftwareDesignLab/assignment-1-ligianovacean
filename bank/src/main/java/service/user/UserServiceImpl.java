@@ -6,38 +6,43 @@ import model.builder.UserBuilder;
 import model.validation.Notification;
 import model.validation.UserValidator;
 import repository.right_role.RightsRolesRepository;
-import repository.user.AuthenticationException;
 import repository.user.UserRepository;
 
 import java.security.MessageDigest;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 
+import static database.Constants.Roles.ADMINISTRATOR;
 import static database.Constants.Roles.EMPLOYEE;
 
-public class AuthenticationServiceImpl implements AuthenticationService{
+public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final RightsRolesRepository rightsRolesRepository;
 
-    public AuthenticationServiceImpl(UserRepository userRepository, RightsRolesRepository rightsRolesRepository) {
+    public UserServiceImpl(UserRepository userRepository, RightsRolesRepository rightsRolesRepository) {
         this.userRepository = userRepository;
         this.rightsRolesRepository = rightsRolesRepository;
     }
 
     @Override
-    public Notification<Boolean> register(String username, String password) {
-        Role employeeRole = rightsRolesRepository.findRoleByTitle(EMPLOYEE);
+    public Notification<Boolean> createEmployee(String username, String password) {
+        Role employeeRole = rightsRolesRepository.findRoleByTitle(ADMINISTRATOR);
+        Role administratorRole = rightsRolesRepository.findRoleByTitle(EMPLOYEE);
+        List<Role> roles = new ArrayList<>();
+        roles.add(employeeRole);
+        roles.add(administratorRole);
         User user = new UserBuilder()
                 .setUsername(username)
                 .setPassword(password)
-                .setRoles(Collections.singletonList(employeeRole))
+                .setRoles(roles)
                 .build();
 
         UserValidator userValidator = new UserValidator(user);
         boolean userValid = userValidator.validate();
         Notification<Boolean> userRegisterNotification = new Notification<>();
 
-        //if user is not valid, the RESULT is false
+        //if security is not valid, the RESULT is false
         if (!userValid) {
             userValidator.getErrors().forEach(userRegisterNotification::addError);
             userRegisterNotification.setResult(Boolean.FALSE);
@@ -49,15 +54,37 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     }
 
     @Override
-    public Notification<User> login(String username, String password) throws AuthenticationException {
-        return userRepository.findByUsernameAndPassword(username, encodePassword(password));
+    public Notification<User> viewEmployee(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Override
-    public boolean logout(User user) {
+    public Notification<Boolean> updateUser(Long id, String username) {
+        User user = new UserBuilder()
+                        .setId(id)
+                        .setUsername(username)
+                        .build();
+        UserValidator userValidator = new UserValidator(user);
+        boolean userValid = userValidator.validateUsername(username);
+        Notification<Boolean> updateUserNotification = new Notification<>();
 
+        if (!userValid) {
+            userValidator.getErrors().forEach(updateUserNotification::addError);
+            updateUserNotification.setResult(Boolean.FALSE);
+        } else {
+            updateUserNotification.setResult(userRepository.update(id, username));
+        }
+        return updateUserNotification;
+    }
 
-        return false;
+    @Override
+    public boolean deleteUser(User user) {
+        return userRepository.delete(user);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     private String encodePassword(String password) {
@@ -77,5 +104,4 @@ public class AuthenticationServiceImpl implements AuthenticationService{
             throw new RuntimeException(ex);
         }
     }
-
 }

@@ -11,7 +11,7 @@ import view.RUDView;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RUDClientController implements Controller{
@@ -52,9 +52,7 @@ public class RUDClientController implements Controller{
                 } else {
                     String[] columnNames = Constants.Columns.CLIENT_TABLE_COLUMNS;
                     Client client = viewClientNotification.getResult();
-                    List<Client> clients = new ArrayList<>();
-                    clients.add(client);
-                    JTable table = tableProcessing.generateTable(clients, columnNames);
+                    JTable table = tableProcessing.generateTable(Collections.singletonList(client), columnNames);
                     viewClientView.loadTable(table);
                 }
             } catch (EntityNotFoundException exc) {

@@ -11,9 +11,13 @@ public interface UserRepository {
 
     Notification<User> findByUsernameAndPassword(String username, String password) throws AuthenticationException;
 
+    Notification<User> findByUsername(String username);
+
     boolean save(User user);
 
-    boolean update(User user);
+    boolean update(Long id, String username);
+
+    public boolean delete(User user);
 
     void removeAll();
 

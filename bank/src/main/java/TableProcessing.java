@@ -1,9 +1,6 @@
 package controller;
 
-import model.validation.Notification;
-
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.lang.reflect.Field;
 import java.util.List;
 

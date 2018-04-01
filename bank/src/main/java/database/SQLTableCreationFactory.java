@@ -7,7 +7,7 @@ public class SQLTableCreationFactory {
     public String getCreateSQLForTable(String table) {
         switch(table) {
             case USER:
-                return "CREATE TABLE IF NOT EXISTS user (" +
+                return "CREATE TABLE IF NOT EXISTS security (" +
                         " id INT NOT NULL AUTO_INCREMENT," +
                         " username VARCHAR(200) NOT NULL," +
                         " password VARCHAR(64) NOT NULL," +
@@ -58,7 +58,7 @@ public class SQLTableCreationFactory {
                         "  INDEX id_role_idx (id_role ASC)," +
                         "  CONSTRAINT user_fkid" +
                         "    FOREIGN KEY (id_user)" +
-                        "    REFERENCES user (id)" +
+                        "    REFERENCES security (id)" +
                         "    ON DELETE CASCADE" +
                         "    ON UPDATE CASCADE," +
                         "  CONSTRAINT role_fkid" +

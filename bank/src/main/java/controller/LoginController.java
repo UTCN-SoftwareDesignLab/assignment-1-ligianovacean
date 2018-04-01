@@ -3,7 +3,7 @@ package controller;
 import model.User;
 import model.validation.Notification;
 import repository.user.AuthenticationException;
-import service.user.AuthenticationService;
+import service.security.AuthenticationService;
 import view.LoginView;
 
 import javax.swing.*;
@@ -16,19 +16,25 @@ public class LoginController implements Controller{
     private final AuthenticationService authenticationService;
 
     private final EmployeeController employeeController;
+    private final AdminController adminController;
 
-    public LoginController(LoginView loginView, AuthenticationService authenticationService, EmployeeController employeeController) {
+    private static String loggedInUser;
+
+    public LoginController(LoginView loginView, AuthenticationService authenticationService,
+                           EmployeeController employeeController, AdminController adminController) {
         this.loginView = loginView;
         this.authenticationService = authenticationService;
         this.employeeController = employeeController;
+        this.adminController = adminController;
         loginView.setLoginButtonListener(new LoginButtonListener());
         loginView.setRegisterButtonListener(new RegisterButtonListener());
+        this.loggedInUser = "";
     }
 
     @Override
     public Notification<Controller> getNextController(String selection) {
         Notification<Controller> nextControllerNotification = new Notification<>();
-        nextControllerNotification.setResult(employeeController);
+        nextControllerNotification.setResult(adminController);
         return nextControllerNotification;
     }
 
@@ -56,6 +62,7 @@ public class LoginController implements Controller{
                     JOptionPane.showMessageDialog(loginView.getContentPane(), loginNotification.getFormattedErrors());
                 } else {
                     JOptionPane.showMessageDialog(loginView.getContentPane(), "Login successful!");
+                    loggedInUser = username;
                     Notification<Controller> nextController = getNextController("");
                     if (nextController != null) {
                         if (!nextController.hasErrors()) {

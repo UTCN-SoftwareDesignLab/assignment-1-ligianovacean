@@ -104,7 +104,7 @@ public class RUDAccountController implements Controller{
                                 .setId(new Long ((String)items.get(0)))
                                 .build();
             if (!accountService.deleteAccount(account)){
-                JOptionPane.showMessageDialog(accountView.getContentPane(), "Account could not be deleted. Please try again late!r");
+                JOptionPane.showMessageDialog(accountView.getContentPane(), "Account could not be deleted. Please try again later!");
             } else {
                 List<Account> accounts = accountService.findAllAccounts();
                 accountView.loadTable(tableProcessing.generateTable(accounts, Constants.Columns.ACCOUNT_TABLE_COLUMNS));

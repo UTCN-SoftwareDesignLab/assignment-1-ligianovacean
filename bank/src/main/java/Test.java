@@ -1,4 +1,5 @@
 import view.CreateAccountView;
+import view.CreateEmployeeView;
 import view.ProcessUtilityBillsView;
 import view.TransferView;
 
@@ -29,13 +30,13 @@ public class Test {
         //new RUDView(columnNames, data);
 
         //new TransferView();
-        new ProcessUtilityBillsView();
+       // new ProcessUtilityBillsView();
         //CreateAccountView test = new CreateAccountView(columnNames, data);
 
 //        test = new CreateAccountView(columnNames, data);
 //        test.setCreateButtonActionListener(new TestTable());
 
-        //new CreateEmployeeView();
+        new CreateEmployeeView();
 
         //new GenerateReportView();
 //

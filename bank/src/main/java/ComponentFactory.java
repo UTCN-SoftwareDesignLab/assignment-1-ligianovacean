@@ -7,8 +7,8 @@ import repository.user.UserRepository;
 import repository.user.UserRepositoryMySQL;
 import service.client.ClientService;
 import service.client.ClientServiceImplementation;
-import service.user.AuthenticationService;
-import service.user.AuthenticationServiceImpl;
+import service.security.AuthenticationService;
+import service.security.AuthenticationServiceImpl;
 
 import java.sql.Connection;
 

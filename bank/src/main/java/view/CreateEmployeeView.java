@@ -36,15 +36,15 @@ public class CreateEmployeeView extends JFrame {
         btnCreate = new JButton("Create Employee");
     }
 
-    private String getUsername() {
+    public String getUsername() {
         return tfUsername.getText();
     }
 
-    private String getPassword() {
+    public String getPassword() {
         return tfPassword.getText();
     }
 
-    private void setCreateButtonActionListener(ActionListener buttonActionListener) {
+    public void setCreateButtonActionListener(ActionListener buttonActionListener) {
         btnCreate.addActionListener(buttonActionListener);
     }
 

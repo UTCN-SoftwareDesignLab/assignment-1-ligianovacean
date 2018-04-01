@@ -43,7 +43,7 @@ public class Bootstrap {
                     "TRUNCATE `user_role`;",
                     "DROP TABLE `user_role`;",
                     "TRUNCATE `role`;",
-                    "DROP TABLE `role`, `user`;",
+                    "DROP TABLE `role`, `security`;",
                     "TRUNCATE `account`;",
                     "TRUNCATE `bill`;",
                     "DROP TABLE `account`, `bill`, `client`;"
@@ -84,7 +84,7 @@ public class Bootstrap {
 
     private static void bootstrapUserData() throws SQLException {
         for (String schema : SCHEMAS) {
-            System.out.println("Bootstrapping user data for " + schema);
+            System.out.println("Bootstrapping security data for " + schema);
 
             JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
             rightsRolesRepository = new RightsRolesRepositoryMySQL(connectionWrapper.getConnection());
