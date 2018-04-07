@@ -7,4 +7,6 @@ public interface BillPaymentService {
 
     Notification<Boolean> payBill(Bill bill, Long accountId, Double sum);
 
+    void removeAll();
+
 }

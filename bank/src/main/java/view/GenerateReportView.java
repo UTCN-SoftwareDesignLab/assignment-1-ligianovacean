@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import static javax.swing.text.View.Y_AXIS;
 
-public class GenerateReportView extends JFrame {
+public class GenerateReportView extends View {
 
     private JLabel lblEmployee;
     private JTextField tfEmployee;
@@ -15,9 +15,11 @@ public class GenerateReportView extends JFrame {
     private JTextField tfStartDate;
     private JTextField tfEndDate;
     private JButton btnConfirm;
-    private JButton btnOpenReport;
+    private JTable tblReport;
+    private JScrollPane scrollPane;
 
     public GenerateReportView() {
+        this.setTitle("Generate Report Page");
         setSize(320, 280);
         setLocationRelativeTo(null);
         initializeFields();
@@ -29,20 +31,21 @@ public class GenerateReportView extends JFrame {
         add(lblEndDate);
         add(tfEndDate);
         add(btnConfirm);
-        add(btnOpenReport);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        add(scrollPane);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
     private void initializeFields() {
-        lblEmployee = new JLabel("Employee identifier");
+        lblEmployee = new JLabel("Employee username");
         tfEmployee = new JTextField();
-        lblStartDate = new JLabel("Start date");
-        lblEndDate = new JLabel("End date");
+        lblStartDate = new JLabel("Start date(E.g.: March 3, 2017)");
+        lblEndDate = new JLabel("End date(E.g.: March 3, 2017");
         tfStartDate = new JTextField();
         tfEndDate = new JTextField();
-        btnConfirm = new JButton("Generate Report");
-        btnOpenReport = new JButton("View Report");
+        btnConfirm = new JButton("Generate Report)");
+        tblReport = new JTable();
+        scrollPane = new JScrollPane(tblReport);
     }
 
     public String getUsername() {
@@ -61,15 +64,10 @@ public class GenerateReportView extends JFrame {
         btnConfirm.addActionListener(btnGenerateButtonListener);
     }
 
-    public void setViewReportButtonActionListener(ActionListener btnViewReportListener) {
-        btnOpenReport.addActionListener(btnViewReportListener);
-    }
-
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
+    public void loadTable(JTable tbl) {
+        this.tblReport = tbl;
+        scrollPane.setViewportView(tblReport);
+        revalidate();
+        repaint();
     }
 }

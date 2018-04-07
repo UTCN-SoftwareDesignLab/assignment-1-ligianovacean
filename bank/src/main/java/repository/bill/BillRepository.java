@@ -10,4 +10,6 @@ public interface BillRepository {
 
     boolean findByIdentifier(String identifier);
 
+    public void removeAll();
+
 }

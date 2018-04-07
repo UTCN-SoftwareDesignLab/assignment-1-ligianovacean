@@ -8,7 +8,7 @@ import java.util.List;
 
 import static javax.swing.text.View.Y_AXIS;
 
-public class CreateAccountView extends JFrame {
+public class CreateAccountView extends View {
 
     private JTable tblClients;
     private JLabel lblClientsTable;
@@ -20,10 +20,12 @@ public class CreateAccountView extends JFrame {
     private JButton btnCreate;
 
     public CreateAccountView() {
-        setSize(300, 300);
+        this.setTitle("Create Account Page");
+        setSize(350, 300);
         setLocationRelativeTo(null);
         initializeFields();
         setLayout(new BoxLayout(getContentPane(), Y_AXIS));
+        add(lblClientsTable);
         add(scrollPane);
         add(tblClients);
         add(lblType);
@@ -31,17 +33,17 @@ public class CreateAccountView extends JFrame {
         add(lblDate);
         add(tfDate);
         add(btnCreate);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
     private void initializeFields() {
-        lblClientsTable = new JLabel("Choose a client:");
+        lblClientsTable = new JLabel("Choose a client: ");
         tblClients = new JTable();
         scrollPane  = new JScrollPane(tblClients);
-        lblType = new JLabel("Account type");
+        lblType = new JLabel("Account type(Savings account/Spending account)");
         tfType = new JTextField();
-        lblDate = new JLabel("Date of creation");
+        lblDate = new JLabel("Date of creation(E.g. March 3, 2017)");
         tfDate = new JTextField();
         btnCreate = new JButton("Create Account");
     }
@@ -54,16 +56,12 @@ public class CreateAccountView extends JFrame {
         return tfDate.getText();
     }
 
-    public Integer getClientId() {
-        return (Integer)tblClients.getValueAt(tblClients.getSelectedRow(), 0);
-    }
-
     public void setCreateButtonActionListener(ActionListener createButtonActionListener){
         btnCreate.addActionListener(createButtonActionListener);
     }
 
     public Long getSelectedRow() {
-        return (Long)tblClients.getValueAt(tblClients.getSelectedRow(), 0);
+        return Long.parseLong(tblClients.getValueAt(tblClients.getSelectedRow(), 0).toString());
     }
 
     public void loadTable(JTable tbl) {
@@ -71,14 +69,6 @@ public class CreateAccountView extends JFrame {
         scrollPane.setViewportView(tbl);
         revalidate();
         repaint();
-    }
-
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
     }
 
 }

@@ -4,6 +4,7 @@ import model.Account;
 import model.validation.AccountValidator;
 import model.validation.ClientValidator;
 import model.validation.Notification;
+import model.validation.TransferValidator;
 import repository.EntityNotFoundException;
 import repository.account.AccountRepository;
 
@@ -70,45 +71,38 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Notification<Boolean> transferBetweenAccounts(Long firstId, Long secondId, Double sum) throws EntityNotFoundException {
+    public Notification<Boolean> transferBetweenAccounts(Long firstId, Long secondId, Double sum) {
         Notification<Boolean> result = new Notification<>();
-        Account firstAccount = accountRepository.findById(firstId).getResult();
-        Account secondAccount = accountRepository.findById(secondId).getResult();
-        Double firstSum = firstAccount.getSum();
-        Double secondSum = secondAccount.getSum();
-        if (firstSum < sum) {
-            result.addError("Transfer cannot be processed. The sum you want to transfer is too large!");
-            result.setResult(Boolean.FALSE);
-        } else {
-            firstSum -= sum;
-            secondSum += sum;
-            firstAccount.setSum(firstSum);
-            secondAccount.setSum(secondSum);
-            accountRepository.update(firstAccount);
-            accountRepository.update(secondAccount);
-            result.setResult(Boolean.TRUE);
+        try {
+            Account firstAccount = accountRepository.findById(firstId).getResult();
+            Account secondAccount = accountRepository.findById(secondId).getResult();
+            Double firstSum = firstAccount.getSum();
+            Double secondSum = secondAccount.getSum();
+
+            TransferValidator transferValidator = new TransferValidator(firstAccount, secondAccount, sum);
+            boolean transferValid = transferValidator.validate();
+            if (!transferValid) {
+                transferValidator.getErrors().forEach(result::addError);
+                result.setResult(Boolean.FALSE);
+            } else {
+                firstSum -= sum;
+                secondSum += sum;
+                firstAccount.setSum(firstSum);
+                secondAccount.setSum(secondSum);
+                accountRepository.update(firstAccount);
+                accountRepository.update(secondAccount);
+                result.setResult(Boolean.TRUE);
+            }
+        } catch (EntityNotFoundException exc) {
+            result.addError("Transfer could not be processed! Make sure the id of the second account is a valid one!");
         }
+
         return result;
     }
 
-
-    public Notification<Boolean>  payBill(Long id, Double sum) {
-
-        Notification<Boolean>  paymentSuccessful = new Notification<>();
-        try {
-            Account account = accountRepository.findById(id).getResult();
-            Double availableSum = account.getSum();
-            if (availableSum < sum) {
-                paymentSuccessful.addError("Not enough money in your account!");
-                paymentSuccessful.setResult(Boolean.FALSE);
-            } else {
-                account.setSum(account.getSum() - sum);
-                accountRepository.update(account);
-                paymentSuccessful.setResult(Boolean.TRUE);
-            }
-        } catch (EntityNotFoundException e) {
-            paymentSuccessful.addError("Misteriously, the account has not been found!");
-        }
-        return paymentSuccessful;
+    @Override
+    public void removeAll() {
+        accountRepository.removeAll();
     }
+
 }

@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * good idea to validate the date
+ */
 public class AccountValidator {
 
     //private static final String DATE_REGEX_VALIDATOR = ^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.]((19|20)\\d\\d)$

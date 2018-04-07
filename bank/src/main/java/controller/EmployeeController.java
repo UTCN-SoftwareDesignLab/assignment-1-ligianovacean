@@ -1,6 +1,7 @@
 package controller;
 
 import model.validation.Notification;
+import service.user.UserActivityService;
 import view.AddClientView;
 import view.EmployeeView;
 
@@ -10,19 +11,14 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.List;
 
-public class EmployeeController implements Controller{
+public class EmployeeController extends Controller{
 
     private final EmployeeView employeeView;
 
-//    private final AddClientController addClientController;
-//    private final RUDClientController rudClientController;
-//    private final CreateAccountController createAccountController;
-//    private final RUDAccountController rudAccountController;
-//    private final TranferController tranferController;
-//    private final ProcessUtilityBillsController billsController;
     HashMap<String, Controller> controllers;
 
-    public EmployeeController(EmployeeView employeeView, HashMap<String, Controller> controllers) {
+    public EmployeeController(EmployeeView employeeView, HashMap<String, Controller> controllers, UserActivityService activityService) {
+        super(activityService);
         this.employeeView = employeeView;
         this.controllers = controllers;
         this.employeeView.setConfirmSelectionButtonListener(new ConfirmSelectionButtonListener());
@@ -32,32 +28,23 @@ public class EmployeeController implements Controller{
         @Override
         public void actionPerformed(ActionEvent e) {
             String selection = employeeView.getSelection();
-
-            Notification<Controller> employeeNotification;
-            employeeNotification = getNextController(selection);
-            if (employeeNotification != null) {
-                if (employeeNotification.hasErrors()) {
-                    JOptionPane.showMessageDialog(employeeView.getContentPane(), employeeNotification.getFormattedErrors());
-                } else {
-                    employeeNotification.getResult().setVisibility(true);
-                }
-            }
+            nextController(selection);
         }
     }
 
-    public Notification<Controller> getNextController(String selection) {
-        Notification<Controller> controllerNotification = new Notification<>();
+    private void nextController(String selection) {
         if (selection.equals(""))
-            controllerNotification.addError("You have made no choice!\n");
+            employeeView.showMessage("Please choose an operation!");
         else {
-            controllerNotification.setResult(controllers.get(selection));
+            Controller controller = controllers.get(selection);
+            controller.setVisibility(true);
+            controller.setLoggedInUser(getLoggedInUser());
         }
-        return controllerNotification;
     }
 
     @Override
     public void setVisibility(Boolean bool) {
-        employeeView.setVisibility(bool);
+        employeeView.setVisible(bool);
     }
 
 }

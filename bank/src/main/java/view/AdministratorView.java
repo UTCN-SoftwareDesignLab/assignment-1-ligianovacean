@@ -1,63 +1,60 @@
 package view;
 
+import database.Constants;
+
 import javax.swing.*;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import static database.Constants.Roles.ADMINISTRATOR;
 import static javax.swing.text.View.Y_AXIS;
 
-public class AdministratorView extends JFrame{
+public class AdministratorView extends View {
 
-    private JRadioButton rbCreateEmployee;
-    private JRadioButton rbViewEmployee;
-    private JRadioButton rbGenerateReport;
+    private List<JRadioButton> rb;
     private ButtonGroup btnGroup;
     private JButton btnConfirmSelection;
 
     public AdministratorView() {
+        this.setTitle("Administrator's First Page");
         setSize(300, 300);
         setLocationRelativeTo(null);
         initializeFields();
         setLayout(new BoxLayout(getContentPane(), Y_AXIS));
-        add(rbCreateEmployee);
-        add(rbViewEmployee);
-        add(rbGenerateReport);
+        for(JRadioButton jRadioButton : rb) {
+            add(jRadioButton);
+        }
         add(btnConfirmSelection);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
     private void initializeFields() {
-        rbCreateEmployee = new JRadioButton("Create Employee");
-        rbViewEmployee = new JRadioButton("RUD Employee");
-        rbGenerateReport = new JRadioButton("Generate Report");
+        rb = new ArrayList<>();
+        List<String> rights = Constants.getRolesRights().get(ADMINISTRATOR);
+        for (String right : rights) {
+            rb.add(new JRadioButton(right));
+        }
         btnGroup = new ButtonGroup();
-        btnGroup.add(rbCreateEmployee);
-        btnGroup.add(rbViewEmployee);
-        btnGroup.add(rbGenerateReport);
+        for (JRadioButton jRadioButton : rb) {
+            btnGroup.add(jRadioButton);
+        }
         btnConfirmSelection = new JButton("Confirm Selection");
     }
 
     public String getSelection() {
-        if (rbCreateEmployee.isSelected())
-            return "CreateEmployee";
-        if (rbViewEmployee.isSelected())
-            return "RUDEmployee";
-        if (rbGenerateReport.isSelected())
-            return "GenerateReport";
+        for (JRadioButton jRadioButton : rb) {
+            if (jRadioButton.isSelected()) {
+                return jRadioButton.getText();
+            }
+        }
         return "";
     }
 
     public void setConfirmActionListener(ActionListener btnActionListener) {
         btnConfirmSelection.addActionListener(btnActionListener);
-    }
-
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
     }
 
 }

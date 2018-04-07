@@ -1,82 +1,62 @@
 package view;
 
+import database.Constants;
+import model.Right;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
+import static database.Constants.Roles.EMPLOYEE;
 import static javax.swing.text.View.Y_AXIS;
 
-public class EmployeeView extends JFrame {
+public class EmployeeView extends View {
 
-    private JRadioButton rbAddClient;
-    private JRadioButton rbUpdateClient;
-    private JRadioButton rbCreateAccount;
-    private JRadioButton rbUpdateAccount;
-    private JRadioButton rbTransferMoney;
-    private JRadioButton rbProcessUtilityBills;
+    private List<JRadioButton> rb;
     private ButtonGroup btnGroup;
     private JButton btnConfirmSelection;
 
     public EmployeeView() throws HeadlessException {
+        this.setTitle("Employee's First Page");
         setSize(300, 300);
         setLocationRelativeTo(null);
         initializeFields();
         setLayout(new BoxLayout(getContentPane(), Y_AXIS));
-        add(rbAddClient);
-        add(rbUpdateClient);
-        add(rbCreateAccount);
-        add(rbUpdateAccount);
-        add(rbTransferMoney);
-        add(rbProcessUtilityBills);
+        for (JRadioButton jRadioButton : rb) {
+            add(jRadioButton);
+        }
         add(btnConfirmSelection);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
     private void initializeFields() {
-        rbAddClient = new JRadioButton("Add Client");
-        rbUpdateClient = new JRadioButton("Update/View Client");
-        rbCreateAccount = new JRadioButton("Create Account");
-        rbUpdateAccount = new JRadioButton("Update/Delete/View Account");
-        rbTransferMoney = new JRadioButton("Transfer money");
-        rbProcessUtilityBills = new JRadioButton("Process utility bills");
+        rb = new ArrayList<>();
+        List<String> rights = Constants.getRolesRights().get(EMPLOYEE);
+        for (String right : rights) {
+            rb.add(new JRadioButton(right));
+        }
         btnGroup = new ButtonGroup();
-        btnGroup.add(rbAddClient);
-        btnGroup.add(rbUpdateClient);
-        btnGroup.add(rbCreateAccount);
-        btnGroup.add(rbUpdateAccount);
-        btnGroup.add(rbTransferMoney);
-        btnGroup.add(rbProcessUtilityBills);
+        for (JRadioButton jRadioButton : rb) {
+            btnGroup.add(jRadioButton);
+        }
         btnConfirmSelection = new JButton("Confirm Selection");
     }
 
     public String getSelection() {
-        if (rbAddClient.isSelected())
-            return "AddClient";
-        if (rbUpdateClient.isSelected())
-            return "RUDClient";
-        if (rbCreateAccount.isSelected())
-            return "CreateAccount";
-        if (rbUpdateAccount.isSelected())
-            return "RUDAccount";
-        if (rbTransferMoney.isSelected())
-            return "TransferMoney";
-        if (rbProcessUtilityBills.isSelected())
-            return "ProcessUtilityBills";
-        return "";
+       for (JRadioButton rb : rb) {
+           if (rb.isSelected())
+               return rb.getText();
+       }
+       return "";
     }
 
     public void setConfirmSelectionButtonListener(ActionListener confirmSelectionButtonListener) {
         btnConfirmSelection.addActionListener(confirmSelectionButtonListener);
     }
 
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
-    }
 
 }

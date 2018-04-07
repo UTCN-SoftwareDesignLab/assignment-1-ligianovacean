@@ -7,7 +7,7 @@ public class SQLTableCreationFactory {
     public String getCreateSQLForTable(String table) {
         switch(table) {
             case USER:
-                return "CREATE TABLE IF NOT EXISTS security (" +
+                return "CREATE TABLE IF NOT EXISTS user (" +
                         " id INT NOT NULL AUTO_INCREMENT," +
                         " username VARCHAR(200) NOT NULL," +
                         " password VARCHAR(64) NOT NULL," +
@@ -58,7 +58,7 @@ public class SQLTableCreationFactory {
                         "  INDEX id_role_idx (id_role ASC)," +
                         "  CONSTRAINT user_fkid" +
                         "    FOREIGN KEY (id_user)" +
-                        "    REFERENCES security (id)" +
+                        "    REFERENCES user (id)" +
                         "    ON DELETE CASCADE" +
                         "    ON UPDATE CASCADE," +
                         "  CONSTRAINT role_fkid" +
@@ -106,6 +106,21 @@ public class SQLTableCreationFactory {
                        "    REFERENCES client (id)" +
                        "    ON DELETE CASCADE" +
                        "    ON UPDATE CASCADE);";
+            case ACTIVITY:
+                return "CREATE TABLE IF NOT EXISTS activity(" +
+                        " id int NOT NULL AUTO_INCREMENT," +
+                        " user_id INT NOT NULL," +
+                        " user_role VARCHAR(30) NOT NULL," +
+                        " date DATE NOT NULL," +
+                        " description VARCHAR(200) NOT NULL," +
+                        " PRIMARY KEY (id), " +
+                        " UNIQUE INDEX id_UNIQUE (id ASC)," +
+                        " INDEX user_id_idx (user_id ASC)," +
+                        " CONSTRAINT id_fkuser" +
+                        "   FOREIGN KEY (user_id)" +
+                        "   REFERENCES user (id)" +
+                        "   ON DELETE CASCADE" +
+                        "   ON UPDATE CASCADE);";
             default:
                 return "";
         }

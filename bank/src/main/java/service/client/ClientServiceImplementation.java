@@ -24,6 +24,15 @@ public class ClientServiceImplementation implements ClientService {
         boolean clientValid = clientValidator.validate();
         Notification<Boolean> addClientNotification = new Notification<>();
 
+        List<Client> allClients = clientRepository.findAll();
+        for (Client cl : allClients) {
+            if (cl.getPersonal_numerical_code().equals(client.getPersonal_numerical_code())) {
+                addClientNotification.addError("PNCs are unique fields!");
+                addClientNotification.setResult(Boolean.FALSE);
+                return addClientNotification;
+            }
+        }
+
         if (!clientValid) {
             clientValidator.getErrors().forEach(addClientNotification::addError);
             addClientNotification.setResult(Boolean.FALSE);

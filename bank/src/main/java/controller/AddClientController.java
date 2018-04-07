@@ -4,31 +4,31 @@ import model.Client;
 import model.builder.ClientBuilder;
 import model.validation.Notification;
 import service.client.ClientService;
+import service.user.UserActivityService;
 import view.AddClientView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
-public class AddClientController implements Controller{
+import static database.Constants.Roles.EMPLOYEE;
+
+public class AddClientController extends Controller {
 
     private final AddClientView addClientView;
     private final ClientService clientService;
 
-    public AddClientController(AddClientView addClientView, ClientService clientService) {
+    public AddClientController(AddClientView addClientView, ClientService clientService, UserActivityService activityService) {
+        super(activityService);
         this.addClientView = addClientView;
         this.clientService = clientService;
         this.addClientView.setSaveChangesButtonListener(new SaveChangesListener());
     }
 
     @Override
-    public Notification<Controller> getNextController(String selection) {
-        return null;
-    }
-
-    @Override
     public void setVisibility(Boolean bool) {
-        addClientView.setVisibility(bool);
+        addClientView.setVisible(bool);
     }
 
     private class SaveChangesListener implements ActionListener {
@@ -47,12 +47,13 @@ public class AddClientController implements Controller{
 
             Notification<Boolean> addClientNotification = clientService.save(client);
             if (addClientNotification.hasErrors()) {
-                JOptionPane.showMessageDialog(addClientView.getContentPane(), addClientNotification.getFormattedErrors());
+                addClientView.showMessage(addClientNotification.getFormattedErrors());
             } else {
                 if (!addClientNotification.getResult()) {
-                    JOptionPane.showMessageDialog(addClientView.getContentPane(), "Adding client not successful, please try again later.");
+                    addClientView.showMessage("Operation not successful, please try again later");
                 } else {
-                    JOptionPane.showMessageDialog(addClientView.getContentPane(), "Client was added!");
+                    addClientView.showMessage("Operation successful, client added!");
+                    registerActivity(getLoggedInUser(), new Date(), "Added client " + name, EMPLOYEE);
                 }
             }
 

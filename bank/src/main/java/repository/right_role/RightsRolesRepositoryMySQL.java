@@ -101,7 +101,6 @@ public class RightsRolesRepositoryMySQL implements RightsRolesRepository{
                 PreparedStatement insertUserRoleStatement = connection
                         .prepareStatement("INSERT INTO `user_role` values (null, ?, ?)");
                 insertUserRoleStatement.setLong(1, user.getId());
-                //System.out.println(role.getId() + "");
                 insertUserRoleStatement.setLong(2, role.getId());
 
                 insertUserRoleStatement.executeUpdate();
@@ -116,15 +115,32 @@ public class RightsRolesRepositoryMySQL implements RightsRolesRepository{
         try {
             List<Role> roles = new ArrayList<>();
             Statement statement = connection.createStatement();
-            String fetchRoleSql = "Select * from " + USER_ROLE + " where `user_id`=\'" + userId + "\'";
+            String fetchRoleSql = "Select * from " + USER_ROLE + " where `id_user`=\'" + userId + "\'";
             ResultSet userRoleResultSet = statement.executeQuery(fetchRoleSql);
             while (userRoleResultSet.next()) {
-                long roleId = userRoleResultSet.getLong("role_id");
+                long roleId = userRoleResultSet.getLong("id_role");
                 roles.add(findRoleById(roleId));
             }
             return roles;
         } catch (SQLException e) {
+        }
+        return null;
+    }
 
+    @Override
+    public List<Role> findRolesForUser(String username) {
+        try {
+            List<Role> roles = new ArrayList<>();
+            Statement statement = connection.createStatement();
+            String fetchRoleSql = "Select * from " + USER_ROLE + " join user on user.id = user_role.id_user " +
+                                    " where user.username = \"" + username + "\"";
+            ResultSet userRoleResultSet = statement.executeQuery(fetchRoleSql);
+            while (userRoleResultSet.next()) {
+                long roleId = userRoleResultSet.getLong("id_role");
+                roles.add(findRoleById(roleId));
+            }
+            return roles;
+        } catch (SQLException e) {
         }
         return null;
     }

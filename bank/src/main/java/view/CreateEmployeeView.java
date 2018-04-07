@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import static javax.swing.text.View.Y_AXIS;
 
-public class CreateEmployeeView extends JFrame {
+public class CreateEmployeeView extends View{
 
     private JLabel lblUsername;
     private JLabel lblPassword;
@@ -15,6 +15,7 @@ public class CreateEmployeeView extends JFrame {
     private JButton btnCreate;
 
     public CreateEmployeeView() {
+        this.setTitle("Create Employee Page");
         setSize(300, 300);
         setLocationRelativeTo(null);
         initializeFields();
@@ -24,7 +25,7 @@ public class CreateEmployeeView extends JFrame {
         add(lblPassword);
         add(tfPassword);
         add(btnCreate);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
@@ -47,13 +48,4 @@ public class CreateEmployeeView extends JFrame {
     public void setCreateButtonActionListener(ActionListener buttonActionListener) {
         btnCreate.addActionListener(buttonActionListener);
     }
-
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
-    }
-
 }

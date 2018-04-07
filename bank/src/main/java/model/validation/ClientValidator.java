@@ -28,10 +28,10 @@ public class ClientValidator {
             errors.add("Please enter both name and surname!");
     }
 
-    // ALL digits!!!!
+
     private void validatePersonalNumericalCode(String pnc) {
-        if (pnc.length() != 13) {
-            errors.add("PNC must be of length 13!");
+        if (pnc.length() != 10) {
+            errors.add("PNC must be of length 10!");
         }
     }
 

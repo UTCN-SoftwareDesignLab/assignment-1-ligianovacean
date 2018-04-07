@@ -28,7 +28,7 @@ public class Bootstrap {
     }
 
 
-    private static void dropAll() throws SQLException {
+    public static void dropAll() throws SQLException {
         for (String schema : SCHEMAS) {
             System.out.println("Dropping all tables in schema: " + schema);
 
@@ -43,7 +43,8 @@ public class Bootstrap {
                     "TRUNCATE `user_role`;",
                     "DROP TABLE `user_role`;",
                     "TRUNCATE `role`;",
-                    "DROP TABLE `role`, `security`;",
+                    "TRUNCATE `activity`;",
+                    "DROP TABLE `role`, `activity`, `user`;",
                     "TRUNCATE `account`;",
                     "TRUNCATE `bill`;",
                     "DROP TABLE `account`, `bill`, `client`;"
@@ -61,7 +62,7 @@ public class Bootstrap {
         System.out.println("Done table bootstrap");
     }
 
-    private static void bootstrapTables() throws SQLException {
+    public static void bootstrapTables() throws SQLException {
         SQLTableCreationFactory sqlTableCreationFactory = new SQLTableCreationFactory();
 
         for (String schema : SCHEMAS) {
@@ -82,9 +83,9 @@ public class Bootstrap {
         System.out.println("Done table bootstrap");
     }
 
-    private static void bootstrapUserData() throws SQLException {
+    public static void bootstrapUserData() throws SQLException {
         for (String schema : SCHEMAS) {
-            System.out.println("Bootstrapping security data for " + schema);
+            System.out.println("Bootstrapping user data for " + schema);
 
             JDBConnectionWrapper connectionWrapper = new JDBConnectionWrapper(schema);
             rightsRolesRepository = new RightsRolesRepositoryMySQL(connectionWrapper.getConnection());
@@ -92,7 +93,6 @@ public class Bootstrap {
             bootstrapRoles();
             bootstrapRights();
             bootstrapRoleRight();
-            bootstrapUserRoles();
         }
     }
 
@@ -120,10 +120,6 @@ public class Bootstrap {
                 rightsRolesRepository.addRoleRight(roleId, rightId);
             }
         }
-    }
-
-    private static void bootstrapUserRoles() throws SQLException {
-
     }
 
 }

@@ -3,6 +3,7 @@ package service.bill.payment;
 import model.Account;
 import model.Bill;
 import model.validation.Notification;
+import model.validation.PaymentValidator;
 import repository.EntityNotFoundException;
 import repository.account.AccountRepository;
 import repository.bill.BillRepository;
@@ -20,19 +21,21 @@ public class BillPaymentServiceImpl implements BillPaymentService{
 
     @Override
     public Notification<Boolean> payBill(Bill bill, Long accountId, Double sum) {
+        PaymentValidator paymentValidator;
         Notification<Boolean> paymentNotification = new Notification<>();
         try {
             Account account = accountRepository.findById(accountId).getResult();
-            Double balance = account.getSum();
-            boolean balanceChecked = checkBalance(balance, sum);
-            if (balanceChecked == false) {
-                paymentNotification.addError("Not enough money on your account!");
+            paymentValidator = new PaymentValidator(bill, account);
+            boolean isValid = paymentValidator.validate();
+
+            if (!isValid) {
+                paymentValidator.getErrors().forEach(paymentNotification::addError);
                 paymentNotification.setResult(Boolean.FALSE);
             } else {
                 boolean saveBill = billRepository.save(bill);
                 if (saveBill) {
                     paymentNotification.setResult(Boolean.TRUE);
-                    account.setSum(balance - sum);
+                    account.setSum(account.getSum() - sum);
                     accountRepository.update(account);
                 } else {
                     paymentNotification.addError("Bill already paid!");
@@ -45,10 +48,9 @@ public class BillPaymentServiceImpl implements BillPaymentService{
         return paymentNotification;
     }
 
-    private boolean checkBalance(Double balance, Double sum) {
-        if (balance < sum) {
-            return false;
-        }
-        return true;
+    @Override
+    public void removeAll() {
+        billRepository.removeAll();
     }
+
 }

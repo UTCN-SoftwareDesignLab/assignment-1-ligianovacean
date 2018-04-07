@@ -47,12 +47,14 @@ public class BillRepositoryMySQL implements BillRepository{
         return false;
     }
 
-    private Bill getBillFromResultSet(ResultSet rs) throws SQLException{
-        return new BillBuilder()
-                .setId(rs.getLong("id"))
-                .setIdentifier(rs.getString("identif"))
-                .setSum(rs.getDouble("sum"))
-                .setIdClient(rs.getLong("id_client"))
-                .build();
+    @Override
+    public void removeAll() {
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "DELETE FROM bill WHERE id >= 0";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

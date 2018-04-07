@@ -9,7 +9,7 @@ import java.util.Random;
 
 import static javax.swing.text.View.Y_AXIS;
 
-public class ProcessUtilityBillsView extends JFrame {
+public class ProcessUtilityBillsView extends View {
 
     private JLabel lblClientsTable;
     private JTable tblClients;
@@ -25,6 +25,7 @@ public class ProcessUtilityBillsView extends JFrame {
     private JButton btnProcess;
 
     public ProcessUtilityBillsView() {
+        this.setTitle("Process Utility Bills Page");
         setSize(300, 400);
         setLocationRelativeTo(null);
         initializeFields();
@@ -39,7 +40,7 @@ public class ProcessUtilityBillsView extends JFrame {
         add(lblSum);
         add(tfSum);
         add(btnProcess);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
@@ -80,6 +81,9 @@ public class ProcessUtilityBillsView extends JFrame {
         List<Object> selection = new ArrayList<>();
         int row = tblAccounts.getSelectedRow();
         int columnCount = tblAccounts.getColumnCount();
+        if (row == -1) {
+            return null;
+        }
         for (int i = 0; i < columnCount; i++) {
             selection.add(tblAccounts.getValueAt(row, i));
         }
@@ -107,13 +111,4 @@ public class ProcessUtilityBillsView extends JFrame {
     public void setBtnProcessActionListener(ActionListener btnProcessActionListener){
         btnProcess.addActionListener(btnProcessActionListener);
     }
-
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
-    }
-
 }

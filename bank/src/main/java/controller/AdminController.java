@@ -1,19 +1,22 @@
 package controller;
 
 import model.validation.Notification;
+import service.user.UserActivityService;
 import view.AdministratorView;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.HashMap;
 
-public class AdminController implements Controller{
+public class AdminController extends Controller{
 
     private final AdministratorView adminView;
     private final HashMap<String, Controller> controllers;
 
-    public AdminController(AdministratorView adminView, HashMap<String, Controller> controllers) {
+    public AdminController(AdministratorView adminView, HashMap<String, Controller> controllers, UserActivityService activityService) {
+        super(activityService);
         this.adminView = adminView;
         this.controllers = controllers;
         adminView.setConfirmActionListener(new ConfirmListener());
@@ -24,30 +27,22 @@ public class AdminController implements Controller{
         @Override
         public void actionPerformed(ActionEvent e) {
             String selection = adminView.getSelection();
-            Notification<Controller> adminNotification;
-            adminNotification = getNextController(selection);
-            if (adminNotification != null) {
-                if (adminNotification.hasErrors()) {
-                    JOptionPane.showMessageDialog(adminView.getContentPane(), adminNotification.getFormattedErrors());
-                } else {
-                    adminNotification.getResult().setVisibility(true);
-                }
-            }
+            nextController(selection);
         }
     }
 
-    public Notification<Controller> getNextController(String selection) {
-        Notification<Controller> controllerNotification = new Notification<>();
+    private void nextController(String selection) {
         if (selection.equals(""))
-            controllerNotification.addError("You have made no choice!\n");
+             adminView.showMessage("Please choose an operation!");
         else {
-            controllerNotification.setResult(controllers.get(selection));
+             Controller controller = controllers.get(selection);
+             controller.setVisibility(true);
+             controller.setLoggedInUser(getLoggedInUser());
         }
-        return controllerNotification;
     }
 
     @Override
     public void setVisibility(Boolean bool) {
-        adminView.setVisibility(bool);
+        adminView.setVisible(bool);
     }
 }

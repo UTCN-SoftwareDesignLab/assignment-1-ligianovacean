@@ -10,6 +10,11 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * update method, be careful in case of update method to check if the given account is in your database
+ * otherwise looks OK
+ */
+
 public class ClientRepositoryMySQL implements ClientRepository {
 
     private final Connection connection;

@@ -1,5 +1,6 @@
 package service.user;
 
+import model.Role;
 import model.User;
 import model.validation.Notification;
 
@@ -17,4 +18,7 @@ public interface UserService {
 
     List<User> findAll();
 
+    List<Role> getRoles(User user);
+
+    void removeAll();
 }

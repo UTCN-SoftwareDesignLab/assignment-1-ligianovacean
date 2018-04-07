@@ -8,7 +8,7 @@ import java.util.List;
 
 import static javax.swing.text.View.Y_AXIS;
 
-public class TransferView extends JFrame {
+public class TransferView extends View {
 
     private JLabel lblClientIdentifier1;
     private JLabel lblAccount1;
@@ -24,6 +24,7 @@ public class TransferView extends JFrame {
     private JButton btnViewClientAccounts;
 
     public TransferView() {
+        this.setTitle("Transfer Page");
         setSize(300, 500);
         setLocationRelativeTo(null);
         initializeFields();
@@ -38,7 +39,7 @@ public class TransferView extends JFrame {
         add(lblSum);
         add(tfSum);
         add(btnTransfer);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
@@ -108,11 +109,4 @@ public class TransferView extends JFrame {
         repaint();
     }
 
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
-    }
 }

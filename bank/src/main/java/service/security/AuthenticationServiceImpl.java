@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static database.Constants.Roles.ADMINISTRATOR;
-import static database.Constants.Roles.EMPLOYEE;
 
 public class AuthenticationServiceImpl implements AuthenticationService{
 
@@ -28,23 +26,36 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     }
 
     @Override
-    public Notification<Boolean> register(String username, String password) {
-        Role employeeRole = rightsRolesRepository.findRoleByTitle(ADMINISTRATOR);
-        Role administratorRole = rightsRolesRepository.findRoleByTitle(EMPLOYEE);
-        List<Role> roles = new ArrayList<>();
-        roles.add(employeeRole);
-        roles.add(administratorRole);
+    public Notification<Boolean> register(String username, String password, String role) {
+        Notification<Boolean> userRegisterNotification = new Notification<>();
+        Notification<User> existingUserNotification = userRepository.findByUsername(username);
+        Role userRole = rightsRolesRepository.findRoleByTitle(role);
+
+        if (!existingUserNotification.hasErrors()) {
+            User user = existingUserNotification.getResult();
+            if (user != null) {
+                List<Role> existingRoles = rightsRolesRepository.findRolesForUser(existingUserNotification.getResult().getId());
+                for (Role r : existingRoles) {
+                    if (role.equals(r.getRole())) {
+                        userRegisterNotification.addError("Role already existing!");
+                        return userRegisterNotification;
+                    }
+                }
+
+                rightsRolesRepository.addRolesToUser(user, Collections.singletonList(userRole));
+                userRegisterNotification.setResult(Boolean.TRUE);
+                return userRegisterNotification;
+            }
+        }
+
         User user = new UserBuilder()
                 .setUsername(username)
                 .setPassword(password)
-                .setRoles(roles)
+                .setRoles(Collections.singletonList(userRole))
                 .build();
-
         UserValidator userValidator = new UserValidator(user);
         boolean userValid = userValidator.validate();
-        Notification<Boolean> userRegisterNotification = new Notification<>();
 
-        //if security is not valid, the RESULT is false
         if (!userValid) {
             userValidator.getErrors().forEach(userRegisterNotification::addError);
             userRegisterNotification.setResult(Boolean.FALSE);
@@ -58,11 +69,6 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     @Override
     public Notification<User> login(String username, String password) throws AuthenticationException {
         return userRepository.findByUsernameAndPassword(username, encodePassword(password));
-    }
-
-    @Override
-    public boolean logout(User user) {
-        return false;
     }
 
     private String encodePassword(String password) {

@@ -20,7 +20,8 @@ public interface AccountService {
 
     List<Account> findAccountsByClientId(Long id);
 
-    public Notification<Boolean> transferBetweenAccounts(Long firstId, Long secondId, Double sum) throws EntityNotFoundException;
+    Notification<Boolean> transferBetweenAccounts(Long firstId, Long secondId, Double sum) throws EntityNotFoundException;
 
-    public Notification<Boolean>  payBill(Long id, Double sum);
+    void removeAll();
+
 }

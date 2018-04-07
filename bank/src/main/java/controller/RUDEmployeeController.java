@@ -4,6 +4,7 @@ import database.Constants;
 import model.User;
 import model.builder.UserBuilder;
 import model.validation.Notification;
+import service.user.UserActivityService;
 import service.user.UserService;
 import view.RUDView;
 
@@ -12,32 +13,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
-public class RUDEmployeeController implements Controller{
+import static database.Constants.Roles.ADMINISTRATOR;
+
+public class RUDEmployeeController extends Controller{
 
     private final UserService userService;
     private final RUDView rudView;
-    private final controller.TableProcessing tableProcessing;
+    private final TableProcessing tableProcessing;
 
-    public RUDEmployeeController(RUDView rudView, UserService userService, controller.TableProcessing tableProcessing) {
+    public RUDEmployeeController(RUDView rudView, UserService userService,
+                                 TableProcessing tableProcessing, UserActivityService activityService) {
+        super(activityService);
         this.userService = userService;
         this.rudView = rudView;
         this.tableProcessing = tableProcessing;
-        rudView.loadTable(tableProcessing.generateTable(userService.findAll(), Constants.Columns.EMPLOYEE_TABLE_COLUMNS));
+        rudView.setIdentifierLabel();
         this.rudView.setBtnViewListener(new ViewListener());
         this.rudView.setBtnUpdateListener(new UpdateListener());
         this.rudView.setBtnDeleteListener(new DeleteListener());
     }
 
     @Override
-    public Notification<Controller> getNextController(String selection) {
-        return null;
-    }
-
-    @Override
     public void setVisibility(Boolean bool) {
-        this.rudView.setVisibility(bool);
+        this.rudView.setVisible(bool);
+        rudView.loadTable(tableProcessing.generateTable(userService.findAll(), Constants.Columns.EMPLOYEE_TABLE_COLUMNS));
     }
 
     private class ViewListener implements ActionListener {
@@ -48,11 +50,12 @@ public class RUDEmployeeController implements Controller{
             JTable tbl;
             Notification<User> viewUserNotification = userService.viewEmployee(username);
             if (viewUserNotification.hasErrors()){
-                JOptionPane.showMessageDialog(rudView.getContentPane(), viewUserNotification.getFormattedErrors());
+                rudView.showMessage( viewUserNotification.getFormattedErrors());
                 tbl = tableProcessing.generateTable(new ArrayList<User>(), Constants.Columns.EMPLOYEE_TABLE_COLUMNS);
             } else {
                 User user = viewUserNotification.getResult();
                 tbl = tableProcessing.generateTable(Collections.singletonList(user), Constants.Columns.EMPLOYEE_TABLE_COLUMNS);
+                registerActivity(getLoggedInUser(), new Date(), "Viewed employee " + username, ADMINISTRATOR);
             }
             rudView.loadTable(tbl);
         }
@@ -63,15 +66,16 @@ public class RUDEmployeeController implements Controller{
         @Override
         public void actionPerformed(ActionEvent e) {
             List<Object> selection = rudView.getSelectedRow();
-            Long id = new Long((String)selection.get(0));
-            String username = (String)selection.get(1);
+            Long id = Long.parseLong(selection.get(0).toString());
+            String username = selection.get(1).toString();
 
             Notification<Boolean> updateNotification = userService.updateUser(id, username);
             if (updateNotification.hasErrors()) {
-                JOptionPane.showMessageDialog(rudView.getContentPane(), updateNotification.getFormattedErrors());
+                rudView.showMessage( updateNotification.getFormattedErrors());
             } else {
                 List<User> users = userService.findAll();
                 rudView.loadTable(tableProcessing.generateTable(users, Constants.Columns.EMPLOYEE_TABLE_COLUMNS));
+                registerActivity(getLoggedInUser(), new Date(), "Updated employee " + id, ADMINISTRATOR);
             }
         }
     }
@@ -82,13 +86,14 @@ public class RUDEmployeeController implements Controller{
         public void actionPerformed(ActionEvent e) {
             List<Object> selection = rudView.getSelectedRow();
             User user = new UserBuilder()
-                    .setId(new Long((String) selection.get(0)))
+                    .setId(Long.parseLong(selection.get(0).toString()))
                     .build();
             if (!userService.deleteUser(user)) {
-                JOptionPane.showMessageDialog(rudView.getContentPane(), "User could not be deleted. Please try again later!");
+                rudView.showMessage("User could not be deleted. Please try again!");
             } else {
                 List<User> users = userService.findAll();
                 rudView.loadTable(tableProcessing.generateTable(users, Constants.Columns.EMPLOYEE_TABLE_COLUMNS));
+                registerActivity(getLoggedInUser(), new Date(), "Deleted employee " + Long.parseLong(selection.get(0).toString()), ADMINISTRATOR);
             }
         }
     }

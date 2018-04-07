@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 import static javax.swing.text.View.Y_AXIS;
 
-public class AddClientView extends JFrame{
+public class AddClientView extends View {
 
     private JLabel lblName;
     private JLabel lblIdCardNo;
@@ -19,6 +19,7 @@ public class AddClientView extends JFrame{
     private JButton btnSaveChanges;
 
     public AddClientView() {
+        this.setTitle("Create Client Page");
         setSize(300, 300);
         setLocationRelativeTo(null);
         initializeFields();
@@ -32,7 +33,7 @@ public class AddClientView extends JFrame{
         add(lblAddress);
         add(tfAddress);
         add(btnSaveChanges);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
@@ -68,11 +69,4 @@ public class AddClientView extends JFrame{
         return tfAddress.getText();
     }
 
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
-    }
 }

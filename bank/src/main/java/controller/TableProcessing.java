@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.lang.reflect.Field;
 import java.util.List;
 
+
 public class TableProcessing{
 
     private static TableProcessing instance;
@@ -17,7 +18,6 @@ public class TableProcessing{
 
 
     public <T> JTable generateTable(List<T> items, String[] columns) {
-        //DefaultTableModel model = new DefaultTableModel();
         Object[][] data = new Object[items.size()][columns.length];
         int rowNumber = 0;
         for (T row : items) {

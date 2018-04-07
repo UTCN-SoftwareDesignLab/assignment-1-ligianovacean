@@ -10,6 +10,7 @@ import repository.user.UserRepository;
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static database.Constants.Roles.ADMINISTRATOR;
@@ -25,24 +26,20 @@ public class UserServiceImpl implements UserService{
         this.rightsRolesRepository = rightsRolesRepository;
     }
 
+
     @Override
     public Notification<Boolean> createEmployee(String username, String password) {
-        Role employeeRole = rightsRolesRepository.findRoleByTitle(ADMINISTRATOR);
-        Role administratorRole = rightsRolesRepository.findRoleByTitle(EMPLOYEE);
-        List<Role> roles = new ArrayList<>();
-        roles.add(employeeRole);
-        roles.add(administratorRole);
+        Role employeeRole = rightsRolesRepository.findRoleByTitle(EMPLOYEE);
         User user = new UserBuilder()
                 .setUsername(username)
                 .setPassword(password)
-                .setRoles(roles)
+                .setRoles(Collections.singletonList(employeeRole))
                 .build();
 
         UserValidator userValidator = new UserValidator(user);
         boolean userValid = userValidator.validate();
         Notification<Boolean> userRegisterNotification = new Notification<>();
 
-        //if security is not valid, the RESULT is false
         if (!userValid) {
             userValidator.getErrors().forEach(userRegisterNotification::addError);
             userRegisterNotification.setResult(Boolean.FALSE);
@@ -53,10 +50,12 @@ public class UserServiceImpl implements UserService{
         return userRegisterNotification;
     }
 
+
     @Override
     public Notification<User> viewEmployee(String username) {
         return userRepository.findByUsername(username);
     }
+
 
     @Override
     public Notification<Boolean> updateUser(Long id, String username) {
@@ -77,15 +76,30 @@ public class UserServiceImpl implements UserService{
         return updateUserNotification;
     }
 
+
     @Override
     public boolean deleteUser(User user) {
         return userRepository.delete(user);
     }
 
+
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+
+    @Override
+    public List<Role> getRoles(User user) {
+        return rightsRolesRepository.findRolesForUser(user.getId());
+    }
+
+
+    @Override
+    public void removeAll() {
+        userRepository.removeAll();
+    }
+
 
     private String encodePassword(String password) {
         try {

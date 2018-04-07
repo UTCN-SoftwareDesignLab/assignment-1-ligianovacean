@@ -9,7 +9,7 @@ import java.util.List;
 
 import static javax.swing.text.View.Y_AXIS;
 
-public class RUDView extends JFrame{
+public class RUDView extends View {
 
     private JButton btnView;
     private JButton btnUpdate;
@@ -20,6 +20,7 @@ public class RUDView extends JFrame{
     private JScrollPane scrollPane;
 
     public RUDView() {
+        this.setTitle("Read/Update/[Delete] Operations' Page");
         setSize(300, 300);
         setLocationRelativeTo(null);
         initializeFields();
@@ -30,12 +31,12 @@ public class RUDView extends JFrame{
         add(btnView);
         add(btnUpdate);
         add(btnDelete);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setVisible(false);
     }
 
     private void initializeFields() {
-        lblEnterUniqueIdentifier = new JLabel("Enter Identifier");
+        lblEnterUniqueIdentifier = new JLabel("Enter Identifier(ID)");
         tfUniqueIdentifier = new JTextField();
         tfUniqueIdentifier.setSize(150, 50);
         tbl = new JTable();
@@ -44,6 +45,14 @@ public class RUDView extends JFrame{
         btnView = new JButton("View");
         btnUpdate = new JButton("Update");
         btnDelete = new JButton("Delete");
+    }
+
+    public void setIdentifierLabel() {
+        lblEnterUniqueIdentifier.setText("Enter Identifier(Username)");
+    }
+
+    public void resetDelete() {
+        btnDelete.setVisible(false);
     }
 
     public void setBtnUpdateListener(ActionListener btnSaveChangesListener) {
@@ -77,13 +86,5 @@ public class RUDView extends JFrame{
         scrollPane.setViewportView(tbl);
         revalidate();
         repaint();
-    }
-
-    public void setVisibility(Boolean bool) {
-        if (bool) {
-            setVisible(true);
-        } else {
-            setVisible(false);
-        }
     }
 }
